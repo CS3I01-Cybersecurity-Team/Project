@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        /* Hide the forms initially */
+        #password-storage-form,
+        #password-request-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bienvenido a tu Password Manager!</h2>
+
+    <!-- Button to Show Password Storage Form -->
+    <button id="show-password-storage-form">Add Password</button>
+
+    <!-- Password Storage Form -->
+    <form method="POST" action="/store_password" id="password-storage-form">
+        <label for="app-name">New Website/App Name: <span class="required">*</span></label>
+        <input type="text" name="app-name" required><br>
+        
+        <label for="password">New Password: <span class="required">*</span></label>
+        <input type="password" name="password" required><br>
+        
+        <label for="url">URL:</label>
+        <input type="text" name="url"><br>
+        
+        <label for="username">Username:</label>
+        <input type="text" name="username"><br>
+        
+        <input type="submit" value="Store Password">
+    </form>
+
+    <!-- Button to Show Password Request Form -->
+    <button id="show-password-request-form">Get Password</button>
+
+    <!-- Password Request Form -->
+    <form method="GET" action="/get_password" id="password-request-form">
+        <label for="website-name">Website Name: <span class="required">*</span></label>
+        <input type="text" name="website-name" required><br>
+        <input type="submit" value="Get Password">
+    </form>
+    
+    <!-- Display user-specific content or data here -->
+    
+    <!-- Placeholder for Password Result -->
+    <div id="password-result">
+        <!-- The password result will be displayed here -->
+    </div>
+
+    <form action="/logout" method="get">
+        <input type="submit" value="Logout">
+    </form>
+
+    <script>
+        document.getElementById('show-password-storage-form').addEventListener('click', function() {
+            var form = document.getElementById('password-storage-form');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        });
+
+        document.getElementById('show-password-request-form').addEventListener('click', function() {
+            var form = document.getElementById('password-request-form');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        });
+    </script>
+
+</body>
+</html>
