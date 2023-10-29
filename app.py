@@ -51,10 +51,6 @@ def login():
                 valid = True
 
         if valid:
-            # VERIFICAR 
-            session['user_id'] = user.id
-            session['master_password'] = password
-            session['salt'] = user.salt
             return jsonify({'success': True, 'redirect': url_for('dashboard')})
         else:
             return  jsonify({'success': False, 'message': 'Login failed. Please check your credentials.'})
