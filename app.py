@@ -1,12 +1,23 @@
 from flask import Flask
 from flask import render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import random
 import hashlib
 import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:091201@localhost:5432/proyecto_seguridad'
 db = SQLAlchemy(app)
+
+def generate_strong_password():
+    password = ''
+    lowercase_letters = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    special_characters = '1234567890!@#$%^&*()?'
+    for _ in range(12):
+        random_char = random.choice(lowercase_letters + uppercase_letters + special_characters)
+        password+=random_char
+    return password
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -51,6 +62,7 @@ def login():
                 valid = True
 
         if valid:
+            session['user_id'] = user.id
             return jsonify({'success': True, 'redirect': url_for('dashboard')})
         else:
             return  jsonify({'success': False, 'message': 'Login failed. Please check your credentials.'})
@@ -65,7 +77,7 @@ def signup():
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            return  jsonify({'success': False, 'message': 'Signup failed. Already existing user.'})
+            return jsonify({'success': False, 'message': 'Signup failed. Already existing user.'})
         
         salt = os.urandom(16)
         hashed_password = hashlib.pbkdf2_hmac('sha-256', password.encode('utf-8'), salt, 600001)

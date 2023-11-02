@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const signupForm = document.querySelector("form")
+    const logInButton = document.getElementById('login-button')
 
     signupForm.addEventListener("submit", function(event) {
         event.preventDefault();
@@ -21,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log(data.message);
             }
         });
+    })
+
+    logInButton.addEventListener('click', function(){
+        window.location.href = '/login'
     })
 
     function generateRandomNonce(byteLength) {
