@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" href="/static/css/bootstrap4-neon-glow.css">
-</head>
-<body>
-    <center><h2>Login</h2></center>
-    <center><div class="col-xl-6">
-    <div class="card">
-    <div class="card-body">
-    <form method="POST" id="form" action="/login">
-        <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" name="username" id= "username" required><br>
-        <label for="password">Password</label>
-        <input type="password" name="password" class="form-control" id="password" required><br>
-        <input type="submit" class="btn btn-primary" value="Log in">
-        </div>
-    </form>
-    </div>
-    </div>
-    </div>
-    </center>
-
-    <center><button class="btn btn-primary ht-tm-element" id="signup-button">
-        Sign Up
-    </button>
-    </center>
-    <script src="/static/js/login.js"></script>
-</body>
+   <head>
+      <title>Login</title>
+      <link rel="stylesheet" href="/static/css/bootstrap4-neon-glow.css">
+   </head>
+   <body>
+      <center>
+         <h2>Login</h2>
+      </center>
+      <center>
+         <div class="col-xl-3">
+            <div class="card">
+               <div class="card-body">
+                  <form method="POST" id="form" action="/login">
+                     <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id= "username" required><br>
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" required><br>
+                        <input type="submit" class="btn btn-primary" value="Log in">
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </center>
+      <center><button class="btn btn-secondary" id="signup-button">
+         Sign Up
+         </button>
+      </center>
+      <script src="/static/js/login.js"></script>
+   </body>
 </html>

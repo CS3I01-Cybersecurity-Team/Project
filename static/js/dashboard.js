@@ -9,7 +9,7 @@ document.getElementById('show-password-request-form').addEventListener('click', 
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    const passwordStorageForm = document.getElementById("password-storage-form");
+    const passwordStorageForm = document.getElementById("pass-form-1");
 
     passwordStorageForm.addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 document.addEventListener("DOMContentLoaded", function() {
-    const passwordRequestForm = document.getElementById("password-request-form")
+    const passwordRequestForm = document.getElementById("pass-form")
     const decryptedPasswordContainer = document.getElementById("decrypted-password-container")
     const showPasswordButton = document.getElementById("show-password-button");
     let finalPassword = ''

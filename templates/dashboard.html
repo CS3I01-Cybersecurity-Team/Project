@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/static/css/bootstrap4-neon-glow.css">
-    <style>
-        #password-storage-form,
-        #password-request-form {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <h2>Bienvenido a tu Password Manager!</h2>
-
-    <button id="show-password-storage-form">Add Password</button>
-
-    <form method="POST" action="/store_password" id="password-storage-form">
-        <label for="app-name">New Website/App Name: <span class="required">*</span></label>
-        <input type="text" name="app-name" required><br>
-        
-        <label for="password">New Password: <span class="required">*</span></label>
-        <input type="password" name="password" required><br>
-            
-        <input type="submit" value="Store Password">
-    </form>
-
-    <button id="show-password-request-form">Get Password</button>
-
-    <form method="GET" action="/get_password" id="password-request-form">
-        <label for="website-name">Website Name: <span class="required">*</span></label>
-        <input type="text" name="website-name" required><br>
-        <input type="submit" value="Get Password">
-    </form>
-        
-    <button id="show-password-button" style="display: none;">Show Password</button>
-
-    <div id="decrypted-password-container" style="display: none;"></div>
-    
-    <form action="/logout" method="get">
-        <input type="submit" value="Logout">
-    </form>
-
-    <script src="/static/js/dashboard.js"></script>
-
-</body>
+   <head>
+      <title>Dashboard</title>
+      <link rel="stylesheet" href="/static/css/bootstrap4-neon-glow.css">
+      <style>
+         #password-storage-form,
+         #password-request-form {
+         display: none;
+         }
+      </style>
+   </head>
+   <body>
+      <center>
+         <h2>Password Manager</h2>
+         <button id="show-password-storage-form" class="btn btn-secondary">Add Password</button>
+         <div class="col-xl-3"  id="password-storage-form">
+            <div class="card">
+               <div class="card-body">
+                  <form method="POST" action="/store_password" id="pass-form-1">
+                     <div class="form-group">
+                        <label for="app-name">App Name<span class="required"></span></label>
+                        <input type="text" class="form-control" name="app-name" required><br>
+                        <label for="password">Password <span class="required"></span></label>
+                        <input type="password" class="form-control" name="password" required><br>
+                        <input type="submit" class="btn btn-primary" value="Store Password">
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <div><button id="show-password-request-form" class="btn btn-secondary">Get Password</button></div>
+         <div class="col-xl-3"  id="password-request-form">
+            <div class="card">
+               <div class="card-body">
+                  <form method="GET" action="/get_password" id="pass-form">
+                     <div class="form-group">
+                        <label for="website-name">Website Name<span class="required"></span></label>
+                        <input type="text" name="website-name" class="form-control" required><br>
+                        <input type="submit" class="btn btn-primary" value="Get Password">
+                     </div>
+                  </form>
+                  <div><button id="show-password-button" class="btn btn-primary" style="display: none;">Show Password</button></div>
+                  <div id="decrypted-password-container" style="display: none;"></div>
+               </div>
+            </div>
+         </div>
+         <form action="/logout" method="get">
+            <input type="submit" class="btn btn-secondary" value="Logout">
+         </form>
+         <script src="/static/js/dashboard.js"></script>
+      </center>
+   </body>
 </html>

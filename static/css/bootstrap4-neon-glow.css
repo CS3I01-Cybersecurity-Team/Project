@@ -2278,7 +2278,8 @@ fieldset:disabled a.btn {
 .btn-secondary {
   color: #fff;
   background-color: #16a4de;
-  border-color: #16a4de; }
+  border-color: #16a4de;
+  margin-bottom: 20px; }
   .btn-secondary:hover {
     color: #fff;
     background-color: #138abb;

@@ -46,6 +46,7 @@ def get_username():
     user = User.query.filter_by(id=user_id).first()
     return jsonify({'username': user.username})
 
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'user_id' in session:
