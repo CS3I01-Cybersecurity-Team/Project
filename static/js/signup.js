@@ -14,12 +14,13 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                window.alert(data.message)
                 window.location.href = data.redirect;
                 const nonce = generateRandomNonce(8)
                 const username = document.getElementById("username").value
                 localStorage.setItem(username + "-nonce", nonce)
             } else {
-                console.log(data.message);
+                window.alert(data.message)
             }
         });
     })

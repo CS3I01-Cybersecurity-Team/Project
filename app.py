@@ -14,7 +14,7 @@ def generate_strong_password():
     lowercase_letters = 'abcdefghijklmnopqrstuvwxyz'
     uppercase_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     special_characters = '1234567890!@#$%^&*()?'
-    for _ in range(12):
+    for _ in range(16):
         random_char = random.choice(lowercase_letters + uppercase_letters + special_characters)
         password+=random_char
     return password
@@ -33,6 +33,11 @@ class Password(db.Model):
     app_name = db.Column(db.String(255), nullable=False)
     encrypted_password = db.Column(db.LargeBinary(255), nullable=False)
     iv = db.Column(db.LargeBinary(255), nullable=False)
+
+@app.route('/get-random-password', methods=['GET'])
+def get_random_password():
+    password = generate_strong_password()
+    return jsonify({'random_password': password})
 
 @app.route('/get-salt', methods=['GET'])
 def get_salt():
@@ -85,7 +90,7 @@ def signup():
         new_user = User(username=username, hashed_password=hashed_password, salt=salt)
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'success': True, 'redirect': url_for('login')})
+        return jsonify({'success': True, 'message': 'Account created successfully' ,'redirect': url_for('login')})
 
     return render_template('signup.html')
 
@@ -122,9 +127,11 @@ def get_encrypted_password():
     user_id = session.get('user_id')
     app_name = request.args.get('appName')
     password = Password.query.filter_by(user_id=user_id, app_name=app_name).first()
+    if not password:
+        return jsonify({'success': False, 'message': 'No password registered for this app'})
     iv = [byte for byte in password.iv]
     encrypted_password = [byte for byte in password.encrypted_password]
-    return jsonify({'encrypted_password': encrypted_password,'iv': iv})
+    return jsonify({'success': True ,'encrypted_password': encrypted_password,'iv': iv})
 
 if __name__ == '__main__':
     app.secret_key = "test"

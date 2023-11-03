@@ -8,6 +8,11 @@ document.getElementById('show-password-request-form').addEventListener('click', 
     form.style.display = (form.style.display === 'none') ? 'block' : 'none';
 });
 
+document.getElementById('show-generate-password-form').addEventListener('click', function() {
+    var form = document.getElementById('generate-password-form');
+    form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     const passwordStorageForm = document.getElementById("pass-form-1");
 
@@ -87,9 +92,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('Data sent to server and stored successfully.');
+                window.alert('Data sent to server and stored successfully.');
             } else {
-                console.error('Failed to send data to the server.');
+                window.alert('Failed to send data to the server.');
             }
         });
     }) 
@@ -112,7 +117,13 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'GET'
         })
 
-        const saltResponse = await fetch('/get-salt', {
+        const encryptedPasswordData = await encrytptedPasswordResponse.json()
+
+        if(encryptedPasswordData.success == false){
+            window.alert(encryptedPasswordData.message)
+            showPasswordButton.style.display = "none"
+        }
+        else{const saltResponse = await fetch('/get-salt', {
             method: 'GET'
         });
 
@@ -120,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'GET'
         });
 
-        const encryptedPasswordData = await encrytptedPasswordResponse.json()
         const saltData = await saltResponse.json()
         const usernameData = await usernameResponse.json()
 
@@ -170,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
         )
         finalPassword = new TextDecoder().decode(new Uint8Array(decryptedData))
         showPasswordButton.style.display = "block";
+        }
     })
 
     let isMouseDown = false;
@@ -192,4 +203,21 @@ document.addEventListener("DOMContentLoaded", function() {
             decryptedPasswordContainer.textContent = `Decrypted Password: *******`;
         }
     });
+})
+
+document.addEventListener("DOMContentLoaded", function() {
+    const generatePasswordForm = document.getElementById("pass-form2")
+    const randomPasswordContainer = document.getElementById("generated-password-container")
+    generatePasswordForm.addEventListener("submit", async function(event) {
+        event.preventDefault()
+
+        const generatedPasswordResponse  = await fetch('/get-random-password', {
+            method: 'GET'
+        });
+
+        const passwordData = await generatedPasswordResponse.json()
+        
+        randomPasswordContainer.style.display = "block"
+        randomPasswordContainer.textContent = "Random Password: " + passwordData.random_password
+    })
 })

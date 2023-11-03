@@ -4,6 +4,7 @@
       <title>Dashboard</title>
       <link rel="stylesheet" href="/static/css/bootstrap4-neon-glow.css">
       <style>
+         #generate-password-form,
          #password-storage-form,
          #password-request-form {
          display: none;
@@ -35,13 +36,26 @@
                <div class="card-body">
                   <form method="GET" action="/get_password" id="pass-form">
                      <div class="form-group">
-                        <label for="website-name">Website Name<span class="required"></span></label>
+                        <label for="website-name">App Name<span class="required"></span></label>
                         <input type="text" name="website-name" class="form-control" required><br>
                         <input type="submit" class="btn btn-primary" value="Get Password">
                      </div>
                   </form>
                   <div><button id="show-password-button" class="btn btn-primary" style="display: none;">Show Password</button></div>
                   <div id="decrypted-password-container" style="display: none;"></div>
+               </div>
+            </div>
+         </div>
+         <div><button id="show-generate-password-form" class="btn btn-secondary">Generate Random Strong Password</button></div>
+         <div class="col-xl-3"  id="generate-password-form">
+            <div class="card">
+               <div class="card-body">
+                  <form method="GET" action="/generate-password" id="pass-form2">
+                     <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Generate Password">
+                     </div>
+                  </form>
+                  <div id="generated-password-container" style="display: none;"></div>
                </div>
             </div>
          </div>
