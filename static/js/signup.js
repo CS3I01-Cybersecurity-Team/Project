@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
     signupForm.addEventListener("submit", function(event) {
         event.preventDefault();
 
+        if (!validateForm()) {
+            return;
+        }
+
         const formData = new FormData(signupForm);
 
         fetch('/signup', {
@@ -36,5 +40,31 @@ document.addEventListener("DOMContentLoaded", function() {
         return Array.from(nonceArray)
             .map(byte => byte.toString(16).padStart(2, '0'))
             .join('');
+    }
+
+    function validateForm() {
+        var password = document.getElementById('password').value;
+
+        if (password.length < 8) {
+            window.alert('Password must be at least 8 characters long.');
+            return false;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            window.alert('Password must contain at least one uppercase letter.');
+            return false;
+        }
+
+        if (!/[a-z]/.test(password)) {
+            window.alert('Password must contain at least one lowercase letter.');
+            return false;
+        }
+
+        if (!/[0-9!#%]/.test(password)) {
+            window.alert('Password must contain at least one number or symbol (!, #, %).');
+            return false;
+        }
+
+        return true;
     }
 });
