@@ -8,6 +8,11 @@ document.getElementById('show-password-request-form').addEventListener('click', 
     form.style.display = (form.style.display === 'none') ? 'block' : 'none';
 });
 
+document.getElementById('show-passwords-request-form').addEventListener('click', function() {
+    var form = document.getElementById('passwords-request-form');
+    form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+});
+
 document.getElementById('show-generate-password-form').addEventListener('click', function() {
     var form = document.getElementById('generate-password-form');
     form.style.display = (form.style.display === 'none') ? 'block' : 'none';
@@ -220,4 +225,117 @@ document.addEventListener("DOMContentLoaded", function() {
         randomPasswordContainer.style.display = "block"
         randomPasswordContainer.textContent = "Random Password: " + passwordData.random_password
     })
+})
+
+document.addEventListener("DOMContentLoaded", function() {
+    const getAllPaswordsForm = document.getElementById("pass-form3")
+    const showPasswordsButton = document.getElementById("show-passwords-button");
+    const decryptedPasswordsContainer = document.getElementById("decrypted-passwords-container")
+    let finalPasswords = []
+    let appNames = []
+
+    getAllPaswordsForm.addEventListener("submit" , async function(event) {
+        event.preventDefault()
+
+        const allPasswordsResponse = await fetch('/get-all-passwords', {
+            method: 'GET'
+        });
+
+        const allPaswordsData = await allPasswordsResponse.json()
+
+        if(allPaswordsData.success == false){
+            window.alert(allPaswordsData.message)
+            showPasswordsButton.style.display = "none"
+        }else{
+            const saltResponse = await fetch('/get-salt', {
+                method: 'GET'
+            });
+    
+            const usernameResponse = await fetch('/get-username', {
+                method: 'GET'
+            });
+    
+            appNames = allPaswordsData.app_names
+            const saltData = await saltResponse.json()
+            const usernameData = await usernameResponse.json()
+
+            const textEncoder = new TextEncoder('iso-8859-1')
+
+            const username = usernameData.username
+            const encodedSalt = textEncoder.encode(saltData.salt)
+            const passwordBuffer = new TextEncoder().encode(sessionStorage.getItem('password') + localStorage.getItem(username + "-nonce"))
+
+            for (let i = 0; i<allPaswordsData.encrypted_passwords.length; ++i){
+                let final_password = ''
+                const key = await window.crypto.subtle.importKey(
+                    'raw',
+                    passwordBuffer,
+                    'PBKDF2',
+                    false,
+                    ['deriveBits']
+                )
+                .then(key => window.crypto.subtle.deriveBits(
+                    {
+                        name: 'PBKDF2',
+                        salt: new Uint8Array(encodedSalt),
+                        iterations: 600000,
+                        hash: {name: 'SHA-256'},
+                    },
+                    key,
+                    256
+                ));
+        
+                const keyAlgorithm = { name: 'AES-GCM', length: 256 };
+                const derivedKey = await window.crypto.subtle.importKey(
+                    'raw',
+                    key,
+                    keyAlgorithm,
+                    true,
+                    ['encrypt', 'decrypt'] 
+                );
+                
+                const encryptedPassword = Uint8Array.from(allPaswordsData.encrypted_passwords[i])
+                const iv = Uint8Array.from(allPaswordsData.ivs[i])
+                
+                const decryptedData = await window.crypto.subtle.decrypt(
+                    {
+                        name: 'AES-GCM',
+                        iv: iv,
+                    },
+                    derivedKey,
+                    encryptedPassword
+                )
+                final_password = new TextDecoder().decode(new Uint8Array(decryptedData))
+                finalPasswords.push(final_password)
+            }
+        }  
+
+        showPasswordsButton.style.display = "block";
+    })
+
+    let isMouseDown = false;
+
+    showPasswordsButton.addEventListener("mousedown", function() {
+        isMouseDown = true;
+        decryptedPasswordsContainer.style.display = "block";
+        let finalContent = "Decrypted Passwords:<br>";
+        
+        for(let i = 0; i<finalPasswords.length; ++i){
+            finalContent += `${appNames[i]}: ${finalPasswords[i]}<br>`;
+        }
+        decryptedPasswordsContainer.innerHTML = finalContent;
+    });
+
+    showPasswordsButton.addEventListener("mouseup", function() {
+        isMouseDown = false;
+        decryptedPasswordsContainer.style.display = "none";
+        decryptedPasswordsContainer.textContent = `*******`;
+    });
+
+    showPasswordsButton.addEventListener("mouseout", function() {
+        if (isMouseDown) {
+            decryptedPasswordsContainer.style.display = "none";
+            decryptedPasswordsContainer.textContent = `*******`;
+        }
+    });
 })

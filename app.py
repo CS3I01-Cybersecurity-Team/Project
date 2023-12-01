@@ -133,6 +133,23 @@ def get_encrypted_password():
     encrypted_password = [byte for byte in password.encrypted_password]
     return jsonify({'success': True ,'encrypted_password': encrypted_password,'iv': iv})
 
+@app.route('/get-all-passwords', methods=['GET'])
+def get_all_passwords():
+    user_id = session.get('user_id')
+    passwords = Password.query.filter_by(user_id=user_id).all()
+    if not passwords:
+        return jsonify({'success': False, 'message':'No passwords registered'})
+    encrypted_passwords = []
+    ivs = []
+    app_names = []
+    for password in passwords:
+        iv = [byte for byte in password.iv]
+        ivs.append(iv)
+        encrypted_password = [byte for byte in password.encrypted_password]
+        encrypted_passwords.append(encrypted_password)
+        app_names.append(password.app_name)
+    return jsonify({'success': True, 'app_names': app_names, 'encrypted_passwords': encrypted_passwords, 'ivs': ivs})
+
 if __name__ == '__main__':
     app.secret_key = "test"
     app.run()

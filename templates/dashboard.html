@@ -6,7 +6,8 @@
       <style>
          #generate-password-form,
          #password-storage-form,
-         #password-request-form {
+         #password-request-form,
+         #passwords-request-form {
          display: none;
          }
       </style>
@@ -34,7 +35,7 @@
          <div class="col-xl-3"  id="password-request-form">
             <div class="card">
                <div class="card-body">
-                  <form method="GET" action="/get_password" id="pass-form">
+                  <form method="GET" action="/get-encrypted-password" id="pass-form">
                      <div class="form-group">
                         <label for="website-name">App Name<span class="required"></span></label>
                         <input type="text" name="website-name" class="form-control" required><br>
@@ -43,6 +44,20 @@
                   </form>
                   <div><button id="show-password-button" class="btn btn-primary" style="display: none;">Show Password</button></div>
                   <div id="decrypted-password-container" style="display: none;"></div>
+               </div>
+            </div>
+         </div>
+         <div><button id="show-passwords-request-form" class="btn btn-secondary">Get All Passwords</button></div>
+         <div class="col-xl-3"  id="passwords-request-form">
+            <div class="card">
+               <div class="card-body">
+                  <form method="GET" action="/get-all-passwords" id="pass-form3">
+                     <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Get Passwords">
+                     </div>
+                  </form>
+                  <div><button id="show-passwords-button" class="btn btn-primary" style="display: none;">Show Passwords</button></div>
+                  <div id="decrypted-passwords-container" style="display: none;"></div>
                </div>
             </div>
          </div>
