@@ -5,8 +5,10 @@ import random
 import hashlib
 import os
 
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:091201@localhost:5432/proyecto_seguridad'
+# 'postgresql://postgres:091201@localhost:5432/proyecto_seguridad'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 def generate_strong_password():
@@ -152,4 +154,4 @@ def get_all_passwords():
 
 if __name__ == '__main__':
     app.secret_key = "test"
-    app.run()
+    app.run(host='0.0.0.0', port=5000)

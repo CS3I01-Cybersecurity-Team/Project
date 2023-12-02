@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  web:
+    build: .
+    command: python app.py
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:091201@db:5432/proyecto_seguridad
+
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 091201
+      POSTGRES_DB: proyecto_seguridad
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Expose port 5432
+
+volumes:
+  postgres_data:
